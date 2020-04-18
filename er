@@ -1,0 +1,15 @@
+
+[1mFrom:[0m /mnt/c/Users/annai/dev/flatiron/labs/Sinatra/sinatra-secure-password-lab-onl01-seng-pt-012220/app/controllers/application_controller.rb @ line 22 self.POST /signup:
+
+    [1;34m17[0m:   [32mend[0m
+    [1;34m18[0m: 
+    [1;34m19[0m:   post [31m[1;31m"[0m[31m/signup[1;31m"[0m[31m[0m [32mdo[0m
+    [1;34m20[0m:     [1;34m#your code here[0m
+    [1;34m21[0m:     user = [1;34;4mUser[0m.new([33m:username[0m => params[[33m:username[0m], [33m:password[0m => params[[33m:password[0m])
+ => [1;34m22[0m:     binding.pry
+    [1;34m23[0m:     [32mif[0m user.save
+    [1;34m24[0m:       redirect [31m[1;31m"[0m[31m/login[1;31m"[0m[31m[0m
+    [1;34m25[0m:     [32melse[0m
+    [1;34m26[0m:       redirect [31m[1;31m"[0m[31m/failure[1;31m"[0m[31m[0m
+    [1;34m27[0m:     [32mend[0m
+
