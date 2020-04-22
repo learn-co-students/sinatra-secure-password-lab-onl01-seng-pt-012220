@@ -21,7 +21,9 @@ class ApplicationController < Sinatra::Base
       redirect to '/failure'
     end
 
-    user = User.new(:username => params[:username], :password => params[:password])
+    params[:balance] = 0
+
+    user = User.new(:username => params[:username], :password => params[:password], :balance => params[:balance])
     if user.save
 			redirect to "/login"
 		else
@@ -61,6 +63,42 @@ class ApplicationController < Sinatra::Base
     redirect "/"
   end
 
+  get '/account/deposit' do
+    erb :deposit
+  end
+
+  post '/account/deposit' do
+    user = current_user
+    old_b = user.balance.to_i
+    new_b = params[:amount].to_i
+    user.balance = old_b + new_b 
+    user.save
+
+    redirect "/account"
+    
+  end
+
+  get '/account/withdraw' do 
+    erb :withdraw
+  end
+
+  post '/account/withdraw' do
+    user = current_user
+    old_b = user.balance.to_i
+    new_b = params[:amount].to_i
+    if new_b <= old_b
+    user.balance = old_b - new_b 
+    user.save
+    redirect "/account"
+    else
+      redirect "/failure"
+    end
+    
+    
+    
+  end
+
+
   helpers do
     def logged_in?
       !!session[:user_id]
@@ -70,5 +108,7 @@ class ApplicationController < Sinatra::Base
       User.find(session[:user_id])
     end
   end
+
+
 
 end
