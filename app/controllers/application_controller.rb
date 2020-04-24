@@ -41,11 +41,11 @@ class ApplicationController < Sinatra::Base
     else
       @user = User.find_by(:username => params[:username])
       if @user && @user.authenticate(params[:password])
-        sesions[:user_id] = @user.id
+        session[:user_id] = @user.id
         redirect '/account'
       else
         @user = User.create(:username => params[:username], :password => params[:password])
-        sesions[:user_id] = @user.id
+        session[:user_id] = @user.id
         redirect '/account'
       end
     end
