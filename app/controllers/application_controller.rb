@@ -17,7 +17,16 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/signup" do
-    #your code here
+		user = User.new(:username => params[:username], :password => params[:password])
+
+    if user.save
+      account = Account.new
+      account.user = user
+      account.save
+			redirect "/login"
+		else
+			redirect "/failure"
+		end
 
   end
 
@@ -32,7 +41,14 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/login" do
-    ##your code here
+		user = User.find_by(:username => params[:username])
+	   
+		if user && user.authenticate(params[:password])
+		  session[:user_id] = user.id
+		  redirect "/account"
+		else
+		  redirect "/failure"
+		end
   end
 
   get "/failure" do
@@ -42,6 +58,33 @@ class ApplicationController < Sinatra::Base
   get "/logout" do
     session.clear
     redirect "/"
+  end
+
+  post '/deposit' do
+    amount = params["deposit"]
+    current_user.account.deposit(amount.to_f)
+    #  current_user.account.save
+    #  Above line is not working, the deposit says successful but the account balance on '/account' remains unchanged.
+
+    redirect '/success'
+  end
+
+  post '/withdraw' do
+    amount = params["withdraw"]
+    
+    if current_user.account.valid_withdraw?(amount.to_f)
+      current_user.account.withdraw(amount.to_f)
+      redirect '/success'
+    end
+    redirect '/invalid'
+  end
+
+  get '/success' do
+    erb :success
+  end
+
+  get '/invalid' do
+    erb :invalid
   end
 
   helpers do
