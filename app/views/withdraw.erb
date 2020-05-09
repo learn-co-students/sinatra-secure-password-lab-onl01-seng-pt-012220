@@ -1,0 +1,9 @@
+<h1>Current Balance: $ <%= current_user.balance %></h1>
+<h2>How much would you like to withdraw?</h2>
+<form action="/withdraw" method="post">
+    <label for="amount">Amount: $</label>
+    <input type="number" name="amount" id="amount" placeholder="0.00" min="1.00" step="1">
+    <br>
+    <input type="submit" value="Withdraw">
+    <a href="/account"><input type="submit" value="Cancel"></a>
+</form>

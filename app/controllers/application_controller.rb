@@ -18,12 +18,24 @@ class ApplicationController < Sinatra::Base
 
   post "/signup" do
     #your code here
-
+    username = params[:username]
+    password = params[:password]
+    
+    if username == '' || password == ''
+      redirect '/failure'
+    else
+      user = User.create(params)
+      redirect '/login'
+    end
   end
 
   get '/account' do
-    @user = User.find(session[:user_id])
-    erb :account
+    if logged_in?
+      @user = User.find(session[:user_id])
+      erb :account
+    else
+      redirect '/login'
+    end
   end
 
 
@@ -33,10 +45,49 @@ class ApplicationController < Sinatra::Base
 
   post "/login" do
     ##your code here
+    @user = User.find_by(:username => params[:username])
+    if @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
+      redirect '/account'
+      
+    else
+      redirect 'failure'
+      
+    end
   end
 
   get "/failure" do
     erb :failure
+  end
+  
+  get "/deposit" do
+    erb :deposit
+  end
+  
+  post "/deposit" do
+     new_balance = (current_user.balance + (params[:amount]).to_f).round(2)
+    current_user.update(balance: new_balance)
+    redirect '/account'
+  end
+
+  get "/withdraw" do
+    erb :withdraw
+  end
+
+  post "/withdraw" do
+    if  current_user.balance >= (params[:amount]).to_f
+      begin
+        new_balance = (current_user.balance - (params[:amount]).to_f).round(2)
+        current_user.update(balance: new_balance)
+        redirect '/account'
+      rescue
+        erb :withdraw,  locals: {
+          error_message: "You do not have enough fund for this transaction, try a lower amount."
+        }
+      end
+    else
+      erb :withdraw
+    end
   end
 
   get "/logout" do
