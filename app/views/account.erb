@@ -1,5 +1,13 @@
-<h1>Welcome</h1>
+<div class="nav" style="background-color:tomatoe">
+    <ul style="list-style-type:none; margin:0; padding:0; width:100%; overflow:hidden">
+        <li style="float:left; display:block; border-right:1px solid #bbb"><a href="/deposit" style="padding: 14px 16px; color:navy; font-size:17px; text-decoration:none">Deposit</a></li>
+        <li style="float:left; display:block; border-right:1px solid #bbb"><a href="/withdraw" style="padding: 14px 16px; color:navy; font-size:17px; text-decoration:none">Withdraw</a></li>
+        <li style="float:left; display:block"><a href="/logout" style="padding: 14px 16px; color:navy; font-size:17px; text-decoration:none">Log Out</a></li>
+    </ul>
+</div>
+<h1>Welcome <%= "#{current_user.username}!"%></h1>
 
 <p>We are currently working on your account.</p>
 
-<p><a href="/logout">Log Out</a></p>
+<h3>Your Balance: $<%= current_user.balance %></h3>
+
